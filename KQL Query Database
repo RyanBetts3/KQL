@@ -1,0 +1,36 @@
+
+["Lab1-4-AuditLogs"]
+| where ActorUserPrincipalName == "adm1n@bonacu.onmicrosoft.com"
+
+
+["Lab2-1-UAL"] 
+| extend d = parse_json(AuditData) 
+| evaluate bag_unpack(d, 'AuditData_')
+| summarize count() by Operations, AuditData_ClientIP
+| where Operations == "UserLoginFailed"
+
+
+["Lab2-1-UAL"] 
+| extend d = parse_json(AuditData) 
+| evaluate bag_unpack(d, 'AuditData_')
+| where Operations == "Add user."
+| project 
+
+
+| summarize count() by Status = "Failure",IP
+AdeleV@bonacu.onmicrosoft.com
+adm1n@bonacu.onmicrosoft.com
+Agung.Zerach@bonacu.onmicrosoft.com
+
+
+["Lab2-2-UAL"] 
+| where UserIds == "leeg@bonacu.onmicrosoft.com" 
+| extend d = parse_json(AuditData) 
+| evaluate bag_unpack(d, 'AuditData_') 
+| where AuditData_Workload == "SharePoint" and Operations == "SearchQueryPerformed"
+
+
+["Lab1-5-AzureDiagnostics"]
+| where ResourceProvider == "MICROSOFT.KEYVAULT"
+| where OperationName == "SecretGet" or OperationName == "KeyGet"
+
