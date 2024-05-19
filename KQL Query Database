@@ -24,7 +24,7 @@ SecurityEvent
 | project TimeGenerated, AccountName, IpAddress, ProcessName
 
 // Detect Suspicious Activity in Azure Active Directory
-// Useful for identifying potential account compromise or unauthorized access attempts
+// Useful for identifying potential account compromise or unauthorised access attempts
 SigninLogs
 | where ResultType == 50057 // Sign-in failed
 | summarize count() by IPAddress, UserPrincipalName, bin(TimeGenerated, 1h)
@@ -39,32 +39,32 @@ AuditLogs
 | project TimeGenerated, initiatedBy, OperationName, ResultDescription
 
 // Monitor Azure Resource Creation and Deletion
-// Useful for detecting potential unauthorized resource provisioning or deprovisioning
+// Useful for detecting potential unauthorised resource provisioning or deprovisioning
 AzureActivity
 | where OperationName has "Microsoft.Resources/subscriptions/resourceGroups/write" or OperationName has "Microsoft.Resources/subscriptions/resourceGroups/delete"
 | project TimeGenerated, OperationName, ResourceGroup, Caller, CallerIpAddress
 
 // Analyze Azure Key Vault Access
-// Useful for detecting potential data exfiltration or unauthorized access to secrets and keys
+// Useful for detecting potential data exfiltration or unauthorised access to secrets and keys
 AzureDiagnostics
 | where ResourceProvider == "MICROSOFT.KEYVAULT"
 | where OperationName == "SecretGet" or OperationName == "KeyGet"
 | project TimeGenerated, OperationName, CallerIpAddress, Identity
 
 // Investigate Azure Storage Access
-// Useful for detecting potential data exfiltration or unauthorized access to storage accounts
+// Useful for detecting potential data exfiltration or unauthorised access to storage accounts
 StorageBlobLogs
 | where OperationName == "PutBlob" or OperationName == "GetBlob"
 | project TimeGenerated, OperationName, ClientIpAddress, UserAgent, Uri
 
 // Monitor Azure Virtual Machine Creation and Deletion
-// Useful for detecting potential unauthorized virtual machine provisioning or deprovisioning
+// Useful for detecting potential unauthorised virtual machine provisioning or deprovisioning
 AzureActivity
 | where OperationName has "Microsoft.Compute/virtualMachines/write" or OperationName has "Microsoft.Compute/virtualMachines/delete"
 | project TimeGenerated, OperationName, ResourceGroup, Caller, CallerIpAddress
 
 // Analyze Azure Network Security Group Configuration Changes
-// Useful for detecting potential unauthorized changes to network security group rules
+// Useful for detecting potential unauthorised changes to network security group rules
 AzureActivity
 | where OperationName has "Microsoft.Network/networkSecurityGroups/write"
 | project TimeGenerated, OperationName, ResourceGroup, Caller, CallerIpAddress
